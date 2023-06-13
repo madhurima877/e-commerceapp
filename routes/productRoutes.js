@@ -8,8 +8,8 @@ const Product = require("../models/Product");
 router.get("/", async(req,res)=>{
 
     const products =  await Product.find({});
-
-    res.render("products/index",{products})
+  const message=req.flash("success");
+    res.render("products/index",{products,message})
 })
 
 // get form to create new product
@@ -28,8 +28,8 @@ router.post("/",async(req,res)=>{
 
      await Product.create({name, price, desc, img});
    
-     req.flash("successs","Product added successfully!");
-     
+     req.flash("success","Product added successfully!");
+
      res.redirect("/products")
 })
 
