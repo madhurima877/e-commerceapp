@@ -8,8 +8,8 @@ const Product = require("../models/Product");
 router.get("/", async(req,res)=>{
 
     const products =  await Product.find({});
-  const message=req.flash("success");
-    res.render("products/index",{products,message})
+//   const message=req.flash("success");
+    res.render("products/index",{products})
 })
 
 // get form to create new product
@@ -55,7 +55,7 @@ router.get("/:productid/edit", async(req,res)=>{
     const {productid} = req.params;
 
     const product = await Product.findById(productid);
-
+  
       res.render("products/edit", {product})
 })
 
@@ -67,8 +67,8 @@ router.patch("/:productid", async(req,res)=>{
 
      await Product.findByIdAndUpdate(productid, {name, price, img, desc});
     
-
-     res.redirect("/products")
+     req.flash("success","Product edited successfully!");
+     res.redirect(`/products/${productid}`)
 })
 
 
@@ -77,7 +77,12 @@ router.delete("/:productid", async(req,res)=>{
     const {productid} = req.params;
 
     await Product.findByIdAndDelete(productid);
+
+    req.flash("error","Product deleted successfully!");
     res.redirect("/products")
+
+  
+   
 })
 
 module.exports = router
