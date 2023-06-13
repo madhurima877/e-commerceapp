@@ -27,7 +27,9 @@ router.post("/",async(req,res)=>{
     const {name, img, price, desc} = req.body;
 
      await Product.create({name, price, desc, img});
-
+   
+     req.flash("successs","Product added successfully!");
+     
      res.redirect("/products")
 })
 
@@ -64,6 +66,7 @@ router.patch("/:productid", async(req,res)=>{
      const {name,img,price, desc} =req.body;
 
      await Product.findByIdAndUpdate(productid, {name, price, img, desc});
+    
 
      res.redirect("/products")
 })
