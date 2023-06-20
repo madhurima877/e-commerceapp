@@ -8,8 +8,10 @@ const Product = require("../models/Product");
 router.get("/", async(req,res)=>{
 
     const products =  await Product.find({});
-//   const message=req.flash("success");
-    res.render("products/index",{products})
+
+    res.render("products/index",{products});
+
+       
 })
 
 // get form to create new product
@@ -27,8 +29,8 @@ router.post("/",async(req,res)=>{
     const {name, img, price, desc} = req.body;
 
      await Product.create({name, price, desc, img});
-   
-     req.flash("success","Product added successfully!");
+
+     req.flash("success", "Product added successfully!")
 
      res.redirect("/products")
 })
@@ -42,7 +44,7 @@ router.get("/:productid", async(req,res)=>{
 
       const product = await Product.findById(productid).populate("reviews");
 
-     // console.log(product)
+    //   console.log(productid)
 
       res.render("products/show", {product})
 
@@ -55,7 +57,7 @@ router.get("/:productid/edit", async(req,res)=>{
     const {productid} = req.params;
 
     const product = await Product.findById(productid);
-  
+
       res.render("products/edit", {product})
 })
 
@@ -66,23 +68,29 @@ router.patch("/:productid", async(req,res)=>{
      const {name,img,price, desc} =req.body;
 
      await Product.findByIdAndUpdate(productid, {name, price, img, desc});
-    
-     req.flash("success","Product edited successfully!");
+
+     req.flash("success", " product updated successfully!")
+
      res.redirect(`/products/${productid}`)
 })
 
 
-router.delete("/:productid", async(req,res)=>{
+router.delete("/:productid",(req,res)=>{
 
-    const {productid} = req.params;
+     const {productid} = req.params;
 
-    await Product.findByIdAndDelete(productid);
+    Product.findByIdAndDelete(productid).then(()=>{
 
-    req.flash("error","Product deleted successfully!");
-    res.redirect("/products")
+        console.log("product deleted")
+    }).catch((err)=>{
 
-  
-   
+        console.log(err)
+    })
+     
+
+     res.redirect("/products")
+
+
 })
 
 module.exports = router
