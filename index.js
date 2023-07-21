@@ -10,7 +10,7 @@ const flash = require('connect-flash');
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/User")
-const port = 3000;
+const port = process.env.port || 3000;
 
 mongoose.connect("mongodb://127.0.0.1:27017/ecommdb")
 .then(()=> console.log("db connected sucessfully".blue))
