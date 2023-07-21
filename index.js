@@ -67,5 +67,10 @@ app.use("/products",productRoutes)
 app.use(reviewRoutes)
 app.use(authRoutes)
 
+app.get("/", (req,res)=>{
+
+  res.render("homePage")
+})
+
 
 app.listen(port, () => console.log(`Server listening at http://localhost:3000`.red))
