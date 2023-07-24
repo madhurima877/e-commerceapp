@@ -21,4 +21,4 @@ router.post("/products/:productid/review", async(req,res)=>{
      res.redirect(`/products/${productid}`)
 })
 
-module.exports = router
+module.exports = router 
