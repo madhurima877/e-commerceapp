@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 const Product = require("./models/Product")
 
-mongoose.connect("mongodb://127.0.0.1:27017/ecommdb")
+require('dotenv').config();
+
+const dbURL=process.env.DBURL
+
+
+mongoose.connect(dbURL,{useNewUrlParser:true})
 .then(()=> console.log("db connected sucessfully".blue))
 .catch((err)=> console.log(err));
+
 
 
 const products = [
@@ -63,4 +69,4 @@ const products = [
 
 }
 
-seedProducts()
+module.exports=seedProducts;

@@ -10,9 +10,15 @@ const flash = require('connect-flash');
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/User")
-const port = process.env.port || 3000;
+const seedProducts= require('./seed')
 
-mongoose.connect("mongodb://127.0.0.1:27017/ecommdb")
+require('dotenv').config();
+const port = process.env.PORT;
+
+const dbURL=process.env.DBURL
+// const dbURL='mongodb+srv://gorain99:gorain99@cluster0.iv4m4wi.mongodb.net/?retryWrites=true&w=majority'
+// ||"mongodb://127.0.0.1:27017/ecommdb";
+mongoose.connect(dbURL,{useNewUrlParser:true})
 .then(()=> console.log("db connected sucessfully".blue))
 .catch((err)=> console.log(err));
 
@@ -34,10 +40,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 
-//Routes
-  const productRoutes = require("./routes/productRoutes");
-  const reviewRoutes = require("./routes/reviewRoutes");
-  const authRoutes = require("./routes/authRoutes")
+
 
 
 app.engine("ejs", ejsMate);
@@ -60,7 +63,12 @@ app.use((req,res,next)=>{
   next();
 
 })
+seedProducts();
 
+//Routes
+const productRoutes = require("./routes/productRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
+const authRoutes = require("./routes/authRoutes")
 
 // routes middleware
 app.use("/products",productRoutes)
@@ -73,4 +81,4 @@ app.get("/", (req,res)=>{
 })
 
 
-app.listen(port, () => console.log(`Server listening at http://localhost:3000`.red))
+app.listen(port, () => console.log(`Server listening at http://localhost:8080`.red))
