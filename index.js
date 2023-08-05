@@ -1,5 +1,5 @@
 const express = require('express')
-const app = express();
+const app = express(); 
 const path = require("path");
 const mongoose = require("mongoose");
 const colors = require("colors");
@@ -10,8 +10,6 @@ const flash = require('connect-flash');
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/User")
-const seedProducts= require('./seed')
-
 require('dotenv').config();
 const port = process.env.PORT;
 
@@ -40,12 +38,17 @@ passport.deserializeUser(User.deserializeUser());
 
 
 
-
+//Routes
+  const productRoutes = require("./routes/productRoutes");
+  const reviewRoutes = require("./routes/reviewRoutes");
+  const authRoutes = require("./routes/authRoutes");
+  const cartRoutes = require("./routes/cartRoutes")
 
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"))
+app.use(express.static(path.join(__dirname,'public')))
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride("_method"))
 
@@ -63,22 +66,20 @@ app.use((req,res,next)=>{
   next();
 
 })
-seedProducts();
 
-//Routes
-const productRoutes = require("./routes/productRoutes");
-const reviewRoutes = require("./routes/reviewRoutes");
-const authRoutes = require("./routes/authRoutes")
 
 // routes middleware
 app.use("/products",productRoutes)
-app.use(reviewRoutes)
+app.use(reviewRoutes) 
 app.use(authRoutes)
+app.use(cartRoutes)
+
 
 app.get("/", (req,res)=>{
 
-  res.render("homePage")
+res.render("homePage")
 })
+
 
 
 app.listen(port, () => console.log(`Server listening at http://localhost:8080`.red))
