@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Review = require("../models/Review");
 const Product = require("../models/Product");
+const {isLoggedIn} = require("../middleware")
 
-
-router.post("/products/:productid/review", async(req,res)=>{
+router.post("/products/:productid/review",isLoggedIn,  async(req,res)=>{
 
     const {productid} = req.params;
     const {rating, comment}= req.body;
@@ -16,9 +16,11 @@ router.post("/products/:productid/review", async(req,res)=>{
 
       product.reviews.push(review);
 
-      await product.save()
+      await product.save();
+
+      req.flash("success", " review added!")
 
      res.redirect(`/products/${productid}`)
 })
 
-module.exports = router 
+module.exports = router

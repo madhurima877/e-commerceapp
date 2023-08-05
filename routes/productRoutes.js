@@ -2,6 +2,8 @@ const express = require("express");
 const router =  express.Router();
 const Product = require("../models/Product");
 
+const {isLoggedIn} = require("../middleware")
+
 
 // get all the products
 
@@ -16,7 +18,7 @@ router.get("/", async(req,res)=>{
 
 // get form to create new product
 
-router.get("/new", (req,res)=>{
+router.get("/new",isLoggedIn, (req,res)=>{
 
     res.render("products/new")
 
@@ -24,7 +26,7 @@ router.get("/new", (req,res)=>{
 
 // create a new product
 
-router.post("/",async(req,res)=>{
+router.post("/",isLoggedIn, async(req,res)=>{
 
     const {name, img, price, desc} = req.body;
 
@@ -52,7 +54,7 @@ router.get("/:productid", async(req,res)=>{
 
 // get edit form
 
-router.get("/:productid/edit", async(req,res)=>{
+router.get("/:productid/edit",isLoggedIn,  async(req,res)=>{
 
     const {productid} = req.params;
 
@@ -61,7 +63,7 @@ router.get("/:productid/edit", async(req,res)=>{
       res.render("products/edit", {product})
 })
 
-router.patch("/:productid", async(req,res)=>{
+router.patch("/:productid",isLoggedIn, async(req,res)=>{
 
      const {productid} = req.params;
 
@@ -69,27 +71,21 @@ router.patch("/:productid", async(req,res)=>{
 
      await Product.findByIdAndUpdate(productid, {name, price, img, desc});
 
-     req.flash("success", " product updated successfully!")
+     req.flash("success", " Product updated successfully!")
 
      res.redirect(`/products/${productid}`)
 })
 
 
-router.delete("/:productid",(req,res)=>{
+router.delete("/:productid",isLoggedIn, async(req,res)=>{
 
      const {productid} = req.params;
 
-    Product.findByIdAndDelete(productid).then(()=>{
+    await Product.findByIdAndDelete(productid);
 
-        console.log("product deleted")
-    }).catch((err)=>{
-
-        console.log(err)
-    })
+    req.flash("error", " One Product has been deleted!")
      
-
      res.redirect("/products")
-
 
 })
 
