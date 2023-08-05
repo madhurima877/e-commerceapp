@@ -42,7 +42,7 @@ passport.deserializeUser(User.deserializeUser());
   const productRoutes = require("./routes/productRoutes");
   const reviewRoutes = require("./routes/reviewRoutes");
   const authRoutes = require("./routes/authRoutes");
-  const cartRoutes = require("./routes/cartRoutes")
+
 
 
 app.engine("ejs", ejsMate);
@@ -72,7 +72,7 @@ app.use((req,res,next)=>{
 app.use("/products",productRoutes)
 app.use(reviewRoutes) 
 app.use(authRoutes)
-app.use(cartRoutes)
+
 
 
 app.get("/", (req,res)=>{
